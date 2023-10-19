@@ -1,6 +1,6 @@
 Feature: Validating the Library Api feature
 
-@Regression
+@Regression @AddBooK
 Scenario Outline: Verify the Add book API and validate add book using the ID
 
 	Given Add the addbook payload with "<Isbn>" and <Aisle>
@@ -12,7 +12,7 @@ Scenario Outline: Verify the Add book API and validate add book using the ID
     |Isbn 	  |Aisle   		  |
     |ANaveen	|123567	 		  |
     
-@Regression    
+@Regression   @GetBook
 Scenario: Verify the Get book using the ID
 	
 	  Given Get the book details with ID
@@ -20,7 +20,7 @@ Scenario: Verify the Get book using the ID
 		Then the API call got success with status code is 200
 		And verify "ANaveen" and <123567> details in the reponse
 	
-	@Regression	
+	@Regression	@DeleteBook
 Scenario: Verify the Delete book using the ID
 		Given Delete the book with http request with payload
 		When user calls with "DeleteBookApi" with "Delete" http request 

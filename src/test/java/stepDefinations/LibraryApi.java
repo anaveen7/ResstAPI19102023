@@ -46,11 +46,11 @@ public class LibraryApi extends Utils{
 		}
 		else if(method.equalsIgnoreCase("GET"))
 		{
-		response=req.when().post(resourceApi.getResources());
+		response=req.when().get(resourceApi.getResources());
 		}
 		else if(method.equalsIgnoreCase("DELETE"))
 		{
-		response=req.when().post(resourceApi.getResources());
+		response=req.when().delete(resourceApi.getResources());
 		}
 	}
 	@Then("the API call got success with status code is {int}")
