@@ -24,7 +24,7 @@ public class Utils {
 	public RequestSpecification requestSpecification(String url) throws IOException {
 		
 		if(req==null) {
-		PrintStream log = new PrintStream(new FileOutputStream("logging.txt"));
+		PrintStream log = new PrintStream(new FileOutputStream("loggingmap.txt"));
 				req =new RequestSpecBuilder().setBaseUri(globalValue(url)).addQueryParam("key", "qaclick123")
 				.addFilter(RequestLoggingFilter.logRequestTo(log))
 				.addFilter(ResponseLoggingFilter.logResponseTo(log))
@@ -34,7 +34,10 @@ public class Utils {
 		return req;
 	}
 	public RequestSpecification requestSpecificationForBook() throws IOException {
+		PrintStream booklog = new PrintStream(new FileOutputStream("loggingbook.txt"));
 		req=new RequestSpecBuilder().setBaseUri(globalValue("LibraryApi")).addHeader("Content-Type","application/json")
+				.addFilter(RequestLoggingFilter.logRequestTo(booklog))
+				.addFilter(ResponseLoggingFilter.logResponseTo(booklog))
 				.build();
 		return req;
 	}

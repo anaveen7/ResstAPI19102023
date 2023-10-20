@@ -10,7 +10,7 @@ import io.restassured.specification.RequestSpecification;
 
 public class Hooks {
 	
-	@Before
+	@Before("@DeletePlace")
 	public void scenario() throws Exception {
 		stepDefination m = new stepDefination();
 		if(m.place_id==null) {
@@ -19,7 +19,7 @@ public class Hooks {
 		m.verify_place_id_created_maps_to_using("Naveen", "GetPlaceAPI");
 		}}
 	
-	@Before
+	@Before("@DeleteBook")
 	public void addBook() throws IOException {
 		LibraryApi l = new LibraryApi();
 		if(l.id==null) {
