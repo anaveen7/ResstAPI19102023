@@ -65,6 +65,8 @@ public class stepDefination extends Utils{
 		user_calls_with_http_request(resource, "GET");
 		String ActualName=getJsonPath(response2,"name");
 		Assert.assertEquals(ExpectedName,ActualName);
+		System.out.println("Place id retrived");
+		System.out.println("Place id retrived2");
 	}
 	@Given("DeletePlace Payload")
 	public void delete_place_payload() throws IOException {
