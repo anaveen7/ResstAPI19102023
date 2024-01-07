@@ -21,6 +21,7 @@ import io.restassured.specification.RequestSpecification;
 public class Utils {
 	
 	public  RequestSpecification req;
+	//public RequestSpecification loginReq;
 	public RequestSpecification requestSpecification(String url) throws IOException {
 		
 		if(req==null) {
@@ -41,7 +42,40 @@ public class Utils {
 				.build();
 		return req;
 	}
+	public RequestSpecification loginEcommerceSpec() {
+		req= new RequestSpecBuilder().setBaseUri("https://rahulshettyacademy.com").addHeader("Content-Type","application/json")
+				.setBody("{\r\n"
+				+ "  \"userEmail\": \"naveenpractice7@gmail.com\",\r\n"
+				+ "  \"userPassword\": \"Test@1234\"\r\n"
+				+ "}").build();
+		return req;
+	}
+	public RequestSpecification ecomLoginSpec(String token) {
+		req= new RequestSpecBuilder().setBaseUri("https://rahulshettyacademy.com")
+				.addHeader("Authorization",token).build();
+		return req;
+	}
+	public RequestSpecification createOrderSpec(String loginToken, String country, String productId) {
+		req= new RequestSpecBuilder().setBaseUri("https://rahulshettyacademy.com")
+				.addHeader("Content-Type","application/json").addHeader("Authorization",loginToken)
+				.setBody("{\r\n"
+						+ "    \"orders\": [\r\n"
+						+ "        {\r\n"
+						+ "            \"country\": \""+country+"\",\r\n"
+						+ "            \"productOrderedId\": \""+productId+"\" \r\n"
+						+ "        }\r\n"
+						+ "    ]\r\n"
+						+ "}").build();
+		return req;
+	}
+	public RequestSpecification getOrderSpec(String token, String orderid) {
+		// TODO Auto-generated method stub
+		req= new RequestSpecBuilder().setBaseUri("https://rahulshettyacademy.com").addHeader("Authorization", token)
+				.addQueryParam("id",orderid).build();
+		return req;
+	}
 	
+
 	public static String  globalValue(String key) throws IOException {
 		Properties prop= new Properties();
 		FileInputStream fis= new FileInputStream(System.getProperty("user.dir")+"\\src\\test\\java\\resources\\global.properties");
