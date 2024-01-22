@@ -12,7 +12,8 @@ public enum APIResources {
 	CreateProductAPI("/api/ecom/order/create-order"),
 	GetOrderDetailsAPI("/api/ecom/order/get-orders-details"),
 	DeleteProductAPI("/api/ecom/product/delete-product/{productId}"),
-	LoginEcomAPI("/api/ecom/auth/login");
+	LoginEcomAPI("/api/ecom/auth/login"),
+	DeleteOrderAPI("/api/ecom/order/delete-order/{orderid}");
 	private String resources;
 	
 	APIResources(String resources){

@@ -11,12 +11,14 @@ import io.restassured.specification.RequestSpecification;
 import io.restassured.specification.ResponseSpecification;
 import junit.framework.Assert;
 import resources.APIResources;
+import resources.TestDataBuild;
 import resources.Utils;
 
 import static io.restassured.RestAssured.*;
 import static org.junit.Assert.assertEquals;
 
 import java.io.File;
+import java.io.IOException;
 
 public class Ecommerce extends Utils{
 	
@@ -27,24 +29,24 @@ public class Ecommerce extends Utils{
 	static String ProductId;
 	APIResources resourceApi;
 	static String orderId;
+	TestDataBuild data;
 	
-	@Given("Login the Ecommerce App with {string} auth login Endpoint")
-	public String login_the_ecommerce_app_with_auth_login_endpoint(String apiEndPoint) {
+	@Given("Login the Ecommerce App with auth login Endpoint {string} and {string} and {string}")
+	public String login_the_ecommerce_app_with_auth_login_endpoint(String apiEndPoint,String useremail,String password) throws IOException {
 		resourceApi= APIResources.valueOf(apiEndPoint);
 		if(loginToken==null) {
-		Response loginRes=  given().spec(loginEcommerceSpec()).post(resourceApi.getResources())
+		Response loginRes=  given().spec(loginEcommerceSpec(useremail,password)).post(resourceApi.getResources())
 				.then().assertThat().statusCode(200).extract().response();
 		loginToken=getJsonPath(loginRes,"token");
 		userId=getJsonPath(loginRes,"userId");
 		System.out.println(loginToken);
 		System.out.println(userId);
-
 		}
 		return loginToken;
 	}
 	
 	@Given("Add the product with {string} and UserID")
-	public void add_the_product_with_and_user_id(String proName) {
+	public void add_the_product_with_and_user_id(String proName) throws IOException {
 		reqSpec=given().log().all().spec(ecomLoginSpec(loginToken))
 				.header("Content-Type","multipart/form-data; boundary=<calculated when request is sent>")
 				.formParam("productName",proName).formParam("productAddedBy",userId).formParam("productCategory","Vechicle")
@@ -82,11 +84,12 @@ public class Ecommerce extends Utils{
 		System.out.println(resp.getStatusCode());
 	}
 	@Given("^Create Order with (.+) and ProductId$")
-	public void create_order_with_country_and_product_id(String Country) {
+	public void create_order_with_country_and_product_id(String Country) throws IOException {
 		System.out.println("Product ID is in create order:"+ProductId);
 		//RestAssured.baseURI="https://rahulshettyacademy.com";
 		//Authorization
-		 reqSpec= given().log().all().spec(createOrderSpec(loginToken,Country,ProductId));
+		data= new TestDataBuild();
+		 reqSpec= given().log().all().spec(ecomLoginSpec(loginToken)).body(data.EcomCreateOrdPayload(Country,ProductId));
 	
 	}
 	@Then("Get orderID and verify the message is {string}")
@@ -96,16 +99,20 @@ public class Ecommerce extends Utils{
 		assertEquals(getJsonPath(resp,"message"),responseMeassage);
 	}
 	@Given("Get order details with orderID")
-	public void get_order_details_with_order_id() {
-		reqSpec=given().spec(getOrderSpec(loginToken,orderId));
+	public void get_order_details_with_order_id() throws IOException {
+		reqSpec=given().spec(ecomLoginSpec(loginToken)).queryParam("id",orderId);
 	}
 	@Then("Verify the message is {string}")
 	public void verify_the_message_is(String messageText) {
 		assertEquals(getJsonPath(resp,"message"),messageText);	
 		}
 	@Given("Delete the product with productID")
-	public void delete_the_product_with_product_id() {
+	public void delete_the_product_with_product_id() throws IOException {
 	    // Write code here that turns the phrase above into concrete actions
 		reqSpec=given().spec(ecomLoginSpec(loginToken)).pathParam("productId", ProductId);
+	}
+	@Given("Delete the product with orderID")
+	public void delete_the_product_with_order_id() throws IOException {
+		reqSpec=given().spec(ecomLoginSpec(loginToken)).pathParam("orderid", orderId);
 	}
 }

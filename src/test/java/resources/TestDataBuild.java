@@ -5,6 +5,9 @@ import java.util.List;
 
 import pojo.AddBook;
 import pojo.AddPlace;
+import pojo.EcomCreateOrder;
+import pojo.EcomLogin;
+import pojo.EcomOrder;
 import pojo.Location;
 
 public class TestDataBuild {
@@ -45,6 +48,24 @@ public class TestDataBuild {
 	
 	public String deleteBook(String ID) {
 		return "{\"ID\":\""+ID+"\"}";
+	}
+	
+	public EcomLogin EcomLoginPayload(String userEmail,String UserPassword) {
+		EcomLogin el= new EcomLogin();
+		el.setUserEmail(userEmail);
+		el.setUserPassword(UserPassword);
+		return el;
+	}
+	public EcomCreateOrder EcomCreateOrdPayload(String country,String productid){
+		EcomCreateOrder ec= new EcomCreateOrder();
+		EcomOrder eo= new EcomOrder();
+		eo.setCountry(country);
+		eo.setProductOrderedId(productid);
+		
+		List<EcomOrder> orderList= new ArrayList<>();
+		orderList.add(eo);
+		ec.setOrders(orderList);
+		return ec;
 	}
 
 }

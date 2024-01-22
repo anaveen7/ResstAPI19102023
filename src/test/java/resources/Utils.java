@@ -17,8 +17,10 @@ import io.restassured.http.ContentType;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
+import pojo.EcomLogin;
 
 public class Utils {
+	TestDataBuild data;
 	
 	public  RequestSpecification req;
 	//public RequestSpecification loginReq;
@@ -42,21 +44,20 @@ public class Utils {
 				.build();
 		return req;
 	}
-	public RequestSpecification loginEcommerceSpec() {
-		req= new RequestSpecBuilder().setBaseUri("https://rahulshettyacademy.com").addHeader("Content-Type","application/json")
-				.setBody("{\r\n"
-				+ "  \"userEmail\": \"naveenpractice7@gmail.com\",\r\n"
-				+ "  \"userPassword\": \"Test@1234\"\r\n"
-				+ "}").build();
+	public RequestSpecification loginEcommerceSpec(String Email,String Password) throws IOException {
+		
+		data=new TestDataBuild();
+		req= new RequestSpecBuilder().setBaseUri(globalValue("baseUrl")).addHeader("Content-Type","application/json")
+				.setBody(data.EcomLoginPayload(Email,Password)).build();
 		return req;
 	}
-	public RequestSpecification ecomLoginSpec(String token) {
-		req= new RequestSpecBuilder().setBaseUri("https://rahulshettyacademy.com")
-				.addHeader("Authorization",token).build();
+	public RequestSpecification ecomLoginSpec(String token) throws IOException {
+		req= new RequestSpecBuilder().setBaseUri(globalValue("baseUrl"))
+				.addHeader("Authorization",token).addHeader("Content-Type","application/json").build();
 		return req;
 	}
-	public RequestSpecification createOrderSpec(String loginToken, String country, String productId) {
-		req= new RequestSpecBuilder().setBaseUri("https://rahulshettyacademy.com")
+	public RequestSpecification createOrderSpec(String loginToken, String country, String productId) throws IOException {
+		req= new RequestSpecBuilder().setBaseUri(globalValue("baseUrl"))
 				.addHeader("Content-Type","application/json").addHeader("Authorization",loginToken)
 				.setBody("{\r\n"
 						+ "    \"orders\": [\r\n"
@@ -66,12 +67,6 @@ public class Utils {
 						+ "        }\r\n"
 						+ "    ]\r\n"
 						+ "}").build();
-		return req;
-	}
-	public RequestSpecification getOrderSpec(String token, String orderid) {
-		// TODO Auto-generated method stub
-		req= new RequestSpecBuilder().setBaseUri("https://rahulshettyacademy.com").addHeader("Authorization", token)
-				.addQueryParam("id",orderid).build();
 		return req;
 	}
 	
@@ -109,3 +104,10 @@ public class Utils {
 //}
 //FileInputStream fis = new FileInputStream("");
 //FileInputStream fstream = new FileInputStream(selectedFile);
+
+//public RequestSpecification getOrderSpec(String token, String orderid) {
+//// TODO Auto-generated method stub
+//req= new RequestSpecBuilder().setBaseUri("https://rahulshettyacademy.com").addHeader("Authorization", token)
+//		.addQueryParam("id",orderid).build();
+//return req;
+//}
